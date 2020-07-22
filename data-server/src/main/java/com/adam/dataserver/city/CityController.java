@@ -2,7 +2,10 @@ package com.adam.dataserver.city;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author ArtSCactus
@@ -13,21 +16,33 @@ public class CityController {
     @Autowired
     private CityService service;
 
-    @GetMapping(path = "/city")
+    @GetMapping(path = "/city/all")
     public Iterable<City> allCities() {
         return service.getAll();
     }
 
+    @GetMapping(path="/city")
+    public City getByName(@RequestParam String name) {
+        return service.getByName(name);
+    }
+    @GetMapping(path="/city/description")
+    public String getDescription(@RequestParam String name){
+        return service.getByName(name).getDescription();
+    }
+
+    @DeleteMapping(path="/city")
+    public void deleteCityByName(@RequestParam String name){
+        service.deleteByName(name);
+    }
+
     @DeleteMapping(path = "/city/{?}")
-    @ResponseStatus(value = HttpStatus.OK)
     public void deleteCity(@PathVariable("?") Long id) {
         service.delete(id);
     }
 
     @PostMapping(path = "/city")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void editCities(@RequestBody City city) {
-        service.save(city);
+    public City editCities(@Valid @RequestBody City city) {
+       return service.save(city);
     }
 
 }

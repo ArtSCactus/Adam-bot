@@ -1,33 +1,14 @@
-package com.adam.dataserver.city;
+package model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
 /**
  * @author ArtSCactus
  * @version 1.0
  */
-@Entity
-@Table(name = "city")
 public class City {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long id;
-    @Column(name = "name")
-    @Pattern(regexp = "[A-zА-я\\-_]{3,}")
-    @NotNull(message = "Name cannot be null")
-    @NotEmpty(message = "Name cannot be empty")
     private String name;
-    @Column(name = "description", length = 1500)
-    @Pattern(regexp = "[A-zА-я\\-_.?;:!'\"\\s)(#@$]{3,}")
-    @NotNull(message = "Description cannot be null")
-    @NotEmpty(message = "Description cannot be empty")
     private String description;
 
     public City() {
