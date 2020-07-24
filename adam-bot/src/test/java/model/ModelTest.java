@@ -1,11 +1,11 @@
 package model;
 
 import exception.DataServerConnectionException;
-import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.BasicHttpEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.log4j.BasicConfigurator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,7 +33,7 @@ public class ModelTest extends Mockito {
             "\"description\":Description" +
             "}]";
     private static final String TEST_CITY_DESCRIPTION = "Description";
-    private HttpClient client;
+    private CloseableHttpClient client;
     private Model model;
 
     @BeforeClass
@@ -43,7 +43,7 @@ public class ModelTest extends Mockito {
 
     @Before
     public void init() {
-        client = mock(HttpClient.class);
+        client = mock(CloseableHttpClient.class);
         model = new Model(DATA_SERVER_HOST, client);
     }
 
@@ -52,7 +52,7 @@ public class ModelTest extends Mockito {
     public void should_return_json_from_http_response_if_everything_ok() throws IOException {
 
         HttpGet get = mock(HttpGet.class);
-        HttpResponse response = mock(HttpResponse.class);
+        CloseableHttpResponse response = mock(CloseableHttpResponse.class);
         StatusLine statusLine = mock(StatusLine.class);
 
         InputStream stream = new ByteArrayInputStream(CITIES_LIST_JSON.getBytes());
@@ -82,7 +82,7 @@ public class ModelTest extends Mockito {
     @Test
     public void should_return_correct_city_description() throws IOException {
         HttpGet get = mock(HttpGet.class);
-        HttpResponse response = mock(HttpResponse.class);
+        CloseableHttpResponse response = mock(CloseableHttpResponse.class);
         InputStream stream = new ByteArrayInputStream(TEST_CITY_DESCRIPTION.getBytes());
         StatusLine statusLine = Mockito.mock(StatusLine.class);
         BasicHttpEntity entity = new BasicHttpEntity();

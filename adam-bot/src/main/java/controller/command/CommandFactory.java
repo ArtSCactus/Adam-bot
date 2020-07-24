@@ -6,8 +6,8 @@ package controller.command;
  */
 public class CommandFactory {
     private static final String HELP_KEYWORD = "help";
-    private static final String ALL_CITIES_KEYWORD = "AllCities";
-    private static final String TEST_CONNECTION_KEYWORD = "TestConnection";
+    private static final String ALL_CITIES_KEYWORD = "allcities";
+    private static final String TEST_CONNECTION_KEYWORD = "testconnection";
     private static final String KEY_SYMBOL = "/";
 
     public static Command defineCommand(String inputMsg) {

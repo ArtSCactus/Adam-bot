@@ -5,10 +5,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import exception.DataServerConnectionException;
 import model.entity.City;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -22,12 +22,12 @@ import java.util.List;
  * @author ArtSCactus
  * @version 1.1
  */
-public class Model {
+public class Model implements AutoCloseable {
     private static final Logger LOGGER = LoggerFactory.getLogger(Model.class);
     private static final int HTTP_NOT_FOUND = 404;
     private static final String DESCRIPTION_NOT_FOUND_MSG = "Эм, кажется, я не знаю такого города.";
     private final String HOST_URL;
-    private HttpClient client;
+    private CloseableHttpClient client;
     private Gson gson;
 
     public Model(String dataServerHost) {
@@ -36,7 +36,7 @@ public class Model {
         HOST_URL = dataServerHost;
     }
 
-    public Model(String HOST_URL, HttpClient client) {
+    public Model(String HOST_URL, CloseableHttpClient client) {
         this.HOST_URL = HOST_URL;
         this.client = client;
     }
@@ -50,11 +50,11 @@ public class Model {
      * @throws DataServerConnectionException if attempt to retrieve data was failed.
      */
     public String executeRequestAndExcludeJson(HttpUriRequest uri) throws DataServerConnectionException {
-        HttpResponse response = null;
         try {
-            response = client.execute(uri);
-            LOGGER.debug("Request to " + uri.getURI() + " executed.\nResponse status: " + response.getStatusLine().getStatusCode());
-            return EntityUtils.toString(response.getEntity());
+            try (CloseableHttpResponse response = client.execute(uri)) {
+                LOGGER.debug("Request to " + uri.getURI() + " executed.\nResponse status: " + response.getStatusLine().getStatusCode());
+                return EntityUtils.toString(response.getEntity());
+            }
         } catch (IOException e) {
             throw new DataServerConnectionException("Failed to send request to data server", e);
         }
@@ -84,14 +84,14 @@ public class Model {
      * @return City description from database or prepared message ({@code DESCRIPTION_NOT_FOUND_MSG})
      * if this wasn't found.
      */
-     public String requestCityDescription(HttpUriRequest uri) {
-        HttpResponse response = null;
+    public String requestCityDescription(HttpUriRequest uri) {
         try {
-            response = client.execute(uri);
-            if (response.getStatusLine().getStatusCode() == HTTP_NOT_FOUND) {
-                return DESCRIPTION_NOT_FOUND_MSG;
-            } else {
-                return EntityUtils.toString(response.getEntity());
+            try (CloseableHttpResponse response = client.execute(uri)) {
+                if (response.getStatusLine().getStatusCode() == HTTP_NOT_FOUND) {
+                    return DESCRIPTION_NOT_FOUND_MSG;
+                } else {
+                    return EntityUtils.toString(response.getEntity());
+                }
             }
         } catch (IOException e) {
             throw new DataServerConnectionException("Failed to send request to data server", e);
@@ -106,22 +106,30 @@ public class Model {
 
     /**
      * A simple method to test data-server availability.
-     *
+     * <p>
      * FOR DEBUGGING PURPOSE ONLY.
      *
      * @return true if data server is available, false otherwise.
      */
-    public boolean testConnectionToDataServer(){
-        HttpUriRequest request = new HttpGet(HOST_URL+"/test");
+    public boolean testConnectionToDataServer() {
+        HttpUriRequest request = new HttpGet(HOST_URL + "/test");
         request.addHeader("Content-type", "application/json");
-        HttpResponse response;
         try {
-            response = client.execute(request);
+            try (CloseableHttpResponse response = client.execute(request)) {
+                return response != null && response.getStatusLine().getStatusCode() == 200;
+            }
+
         } catch (IOException e) {
             return false;
         }
-        return response != null && response.getStatusLine().getStatusCode() == 200;
+    }
+    @Override
+    public void close() throws IOException {
+        client.close();
     }
 
-
+    @Override
+    protected void finalize() throws Throwable {
+        client.close();
+    }
 }

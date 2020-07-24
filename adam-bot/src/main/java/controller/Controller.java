@@ -6,6 +6,8 @@ import model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 /**
  * @author ArtSCactus
  * @version 1.1
@@ -21,22 +23,30 @@ public class Controller {
     }
 
     public String defineAnswer(String inputMessage) {
-        if (inputMessage.startsWith("/")) {
-            return CommandFactory.defineCommand(inputMessage).answer(inputMessage, model);
-        } else {
-            String description;
-            try {
-                description = getCityDescription(inputMessage);
-            } catch (DataServerConnectionException e) {
-                LOGGER.error("A data server error occurred.", e);
-                return DATA_SERVER_CONNECTION_ERROR_MSG;
-            }
-            return description;
+        return CommandFactory.defineCommand(inputMessage).answer(inputMessage, model);
+    }
 
+    public String defineNoneCommandAnswer(String message) {
+        String description;
+        try {
+            description = getCityDescription(message);
+        } catch (DataServerConnectionException e) {
+            LOGGER.error("A data server error occurred.", e);
+            return DATA_SERVER_CONNECTION_ERROR_MSG;
         }
+        return description;
     }
 
     public String getCityDescription(String name) {
         return model.getCityDescription(name);
+    }
+
+
+    public void closeModel(){
+        try {
+            model.close();
+        } catch (IOException e) {
+            LOGGER.error("Failed to close model.", e);
+        }
     }
 }

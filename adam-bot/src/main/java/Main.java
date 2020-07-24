@@ -1,15 +1,11 @@
-import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.ApiContextInitializer;
-import org.telegram.telegrambots.meta.ApiContext;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import java.io.*;
-import java.net.URL;
+import java.io.IOException;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 /**
  * @author ArtSCactus
