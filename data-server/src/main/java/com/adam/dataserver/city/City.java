@@ -25,7 +25,7 @@ public class City {
     @NotEmpty(message = "Name cannot be empty")
     private String name;
     @Column(name = "description", length = 1500)
-    @Pattern(regexp = "[A-zА-я\\-_.?;:!,'\\[\\]\"\\s)(#@$]{3,}")
+    @Pattern(regexp = "[A-zА-я0-9\\-_.?;:!,'\\[\\]\"\\s\\n)(#@$]{3,}")
     @NotNull(message = "Description cannot be null")
     @NotEmpty(message = "Description cannot be empty")
     private String description;

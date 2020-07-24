@@ -41,6 +41,18 @@ public class CityService {
         }
     }
 
+    /** Applies the repository.save() for each city in list.
+     * If all cities successfully saved returns true.
+     * @param cities list of {@link City} objects
+     * @return true if success.
+     */
+    public boolean save(List<City> cities){
+        for (City city : cities){
+            repository.save(city);
+        }
+        return true;
+    }
+
     public void deleteByName(String name){
         repository.deleteByName(name);
     }

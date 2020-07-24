@@ -2,10 +2,11 @@ package com.adam.dataserver.city;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author ArtSCactus
@@ -41,8 +42,14 @@ public class CityController {
     }
 
     @PostMapping(path = "/city")
-    public City editCities(@Valid @RequestBody City city) {
+    public City editCity(@Valid @RequestBody City city) {
        return service.save(city);
+    }
+
+    @PostMapping(path="/city/all")
+    public ResponseEntity<HttpStatus> editMultipleCities(@Valid @RequestBody List<City> cities){
+        return service.save(cities)? ResponseEntity.ok(HttpStatus.ACCEPTED)
+                : ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
     }
 
 }
