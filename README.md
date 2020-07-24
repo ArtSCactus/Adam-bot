@@ -12,10 +12,48 @@ In order to run a bot, you first need to build it. To do this, just go using the
 mvn clean install
 ```
 
-After the end of the build, the 'jars' folder will appear in the project root, which will contain the assembled executable files for each module. In order to start a project, you can run each module separately. However, this can be done simultaneously. To do this, run run.sh or run.cmd (sh for Linux and cmd for Windows). When you start sh, the data-server will first start, and then after 10 seconds the bot itself will start in the background (10 seconds are needed to initialize and start the server with data). The process is similar for cmd, with the only difference that the two modules will run in different tabs.
+After the end of the build, the 'jars' folder will appear in the project root, which will contain the assembled executable files for each module. In order to start a project, you can run each module separately. However, this can be done simultaneously. To do this, run:
+```
+run.sh
+run.cmd 
+```
+sh for Linux and cmd for Windows. When you start sh, the data-server will start first, and then after 10 seconds the bot itself will start in the background (10 seconds are needed to initialize and start the server with data). The process for cmd is similar, with the only difference that the two modules will run in different tabs.
 
 When the bot is ready to work, a message about this will appear in the console.
 
+# Hot to edit data
+
+Data management is carried out using http requests. To add information about city, you need to present the city as:
+```
+{
+"id":null,
+"name":"CityName",
+"description":"description"
+}
+Set id null, to add new note or specify the id of an existing record to change it
+or as array
+
+[{
+"name":"City name one",
+"description":"description1"
+},
+{
+"name":"City name two",
+"description":"description2"
+}]
+```
+URL mappings:
+```
+GET /city/all - return all cities
+GET /city?name={name} - return city by name
+GET /city/description?name={name} - return only city description as simple row by city name
+DELETE /city?name={name} - delete city by name
+DELETE /city/{id} - delete city by id
+POST /city - add/edit city
+POST /city/all - add/edit list of object. Returns 202 if everything ok and 400 otherwise
+GET /test - just to test connection. Returns 200.
+
+```
 # Requirements
 ```
 jdk 1.8+
