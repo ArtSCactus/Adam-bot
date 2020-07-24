@@ -3,6 +3,7 @@ package com.adam.dataserver.city;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -23,11 +24,13 @@ public class City {
     @Pattern(regexp = "[A-zА-я\\-_\\s]{3,}")
     @NotNull(message = "Name cannot be null")
     @NotEmpty(message = "Name cannot be empty")
+    @NotBlank(message = "The city name cannot be blank")
     private String name;
     @Column(name = "description", length = 1500)
     @Pattern(regexp = "[A-zА-я0-9\\-_.?;:!,'\\[\\]\"\\s\\n)(#@$]{3,}")
     @NotNull(message = "Description cannot be null")
     @NotEmpty(message = "Description cannot be empty")
+    @NotBlank(message = "Description cannot be blank")
     private String description;
 
     public City() {
