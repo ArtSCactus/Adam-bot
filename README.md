@@ -49,7 +49,7 @@ GET /city?name={name} - return city by name
 GET /city/description?name={name} - return only city description as simple row by city name
 DELETE /city?name={name} - delete city by name
 DELETE /city/{id} - delete city by id
-POST /city - add/edit city
+POST /city - add/edit city returns saved json object if everything ok.
 POST /city/all - add/edit list of object. Returns 202 if everything ok and 400 otherwise
 GET /test - just to test connection. Returns 200.
 
