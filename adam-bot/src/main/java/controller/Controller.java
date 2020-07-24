@@ -1,6 +1,6 @@
 package controller;
 
-import command.CommandFactory;
+import controller.command.CommandFactory;
 import exception.DataServerConnectionException;
 import model.Model;
 import org.slf4j.Logger;
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Controller {
     private static final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
-    private static final String DATA_SERVER_CONNECTION_ERROR_MSG = "Упс... Видимо, источник моих познаний сейчас" +
+    private static final String DATA_SERVER_CONNECTION_ERROR_MSG = "Упс... видимо, источник моих познаний сейчас" +
             " недоступен.";
     private Model model;
 

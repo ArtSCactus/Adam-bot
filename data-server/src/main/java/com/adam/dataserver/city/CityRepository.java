@@ -16,8 +16,6 @@ public interface CityRepository extends CrudRepository<City, Long> {
 
     Optional<City> findByName(String name);
 
-    City getByName(String name);
-
     void deleteById(Long id);
 
     void deleteByName(String name);

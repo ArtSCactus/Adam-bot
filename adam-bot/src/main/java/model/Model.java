@@ -36,6 +36,11 @@ public class Model {
         HOST_URL = dataServerHost;
     }
 
+    public Model(String HOST_URL, HttpClient client) {
+        this.HOST_URL = HOST_URL;
+        this.client = client;
+    }
+
     /**
      * Basic method to retrieve data from data-server. Executes given {@link HttpUriRequest} and returns json,
      * that was received.
@@ -44,7 +49,7 @@ public class Model {
      * @return json as String object.
      * @throws DataServerConnectionException if attempt to retrieve data was failed.
      */
-    private String executeRequestAndExcludeJson(HttpUriRequest uri) throws DataServerConnectionException {
+    public String executeRequestAndExcludeJson(HttpUriRequest uri) throws DataServerConnectionException {
         HttpResponse response = null;
         try {
             response = client.execute(uri);
@@ -67,8 +72,8 @@ public class Model {
             return cities;
         } catch (DataServerConnectionException e) {
             LOGGER.error("Failed to load all cities.", e);
+            throw new DataServerConnectionException(e);
         }
-        return null;
     }
 
     /**
@@ -79,7 +84,7 @@ public class Model {
      * @return City description from database or prepared message ({@code DESCRIPTION_NOT_FOUND_MSG})
      * if this wasn't found.
      */
-    private String requestCityDescription(HttpUriRequest uri) {
+     public String requestCityDescription(HttpUriRequest uri) {
         HttpResponse response = null;
         try {
             response = client.execute(uri);
@@ -99,6 +104,13 @@ public class Model {
         return requestCityDescription(request);
     }
 
+    /**
+     * A simple method to test data-server availability.
+     *
+     * FOR DEBUGGING PURPOSE ONLY.
+     *
+     * @return true if data server is available, false otherwise.
+     */
     public boolean testConnectionToDataServer(){
         HttpUriRequest request = new HttpGet(HOST_URL+"/test");
         request.addHeader("Content-type", "application/json");

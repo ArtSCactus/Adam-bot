@@ -12,12 +12,14 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
  */
 public class Bot extends TelegramLongPollingBot {
     private static final Logger LOGGER = LoggerFactory.getLogger(Bot.class);
-    private static final String DATA_SERVER_HOST_URL = "http://localhost:8080";
-    private static final String BOT_TOKEN = "1073299330:AAG5p4qoY9pTcmEdEnZFqUeR7hmB_OyRhfg";
+    private final String BOT_TOKEN;
+    private final String BOT_USERNAME;
     private Controller controller;
 
-    public Bot() {
-        controller = new Controller(DATA_SERVER_HOST_URL);
+    public Bot(String botToken, String datasourceHost, String botUsername) {
+        controller = new Controller(datasourceHost);
+        BOT_TOKEN = botToken;
+        BOT_USERNAME = botUsername;
     }
 
     public String getBotToken() {
@@ -52,7 +54,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public String getBotUsername() {
-        return "ArtSCactus";
+        return BOT_USERNAME;
     }
 
 
