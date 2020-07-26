@@ -34,10 +34,12 @@ Set id null, to add new note or specify the id of an existing record to change i
 or as array
 
 [{
+"id":null,
 "name":"City name one",
 "description":"description1"
 },
 {
+"id":null,
 "name":"City name two",
 "description":"description2"
 }]

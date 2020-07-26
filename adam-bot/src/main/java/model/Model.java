@@ -19,6 +19,9 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 /**
+ * Provides data handling functionality using {@link CloseableHttpClient} library to retrieve data
+ * from the server, which is presented in JSON form.
+ *
  * @author ArtSCactus
  * @version 1.1
  */
@@ -56,6 +59,7 @@ public class Model implements AutoCloseable {
                 return EntityUtils.toString(response.getEntity());
             }
         } catch (IOException e) {
+            LOGGER.error("Failed to execute request to data-server");
             throw new DataServerConnectionException("Failed to send request to data server", e);
         }
     }
@@ -123,6 +127,12 @@ public class Model implements AutoCloseable {
             return false;
         }
     }
+
+    /**
+     * Needs to close Http client, that creates at constructor stage.
+     *
+     * @throws IOException
+     */
     @Override
     public void close() throws IOException {
         client.close();

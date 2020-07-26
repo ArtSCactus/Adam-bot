@@ -7,10 +7,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.log4j.BasicConfigurator;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.Mockito;
 
 import java.io.ByteArrayInputStream;
@@ -45,6 +42,11 @@ public class ModelTest extends Mockito {
     public void init() {
         client = mock(CloseableHttpClient.class);
         model = new Model(DATA_SERVER_HOST, client);
+    }
+    @After
+    public void closeClient() throws IOException {
+        client.close();
+        model.close();
     }
 
 
