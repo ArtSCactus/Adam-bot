@@ -64,10 +64,3 @@ PostgreSQL 11.5+ database
 # Notice
 
 Bot can work without the data-server, but every time, when he cannot retrieve data from server, it will respond with a message that it cannot access the data.
-
-
-# Token
-Here's bot token:
-```
-1073299330:AAG5p4qoY9pTcmEdEnZFqUeR7hmB_OyRhfg
-```
